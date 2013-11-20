@@ -3,26 +3,30 @@ class Producto extends Eloquent {
 	protected $table = 'producto';
 	protected $fillable = array('descripcion', 'precio', 'vendedor_id');
 
-	$respuesta = array();
-	$reglas = array(
-		'vendedor_id' => 'required',
-		'descripcion' => array('required', 'max:255'),
-		'precio' => array('required', 'numeric')
-	);
+	public static function agregarProducto($input)
+	{
+		$respuesta = array();
 
-	$validator = Validator::make($input, $reglas);
+		$reglas = array(
+			'vendedor_id' => 'required',
+			'descripcion' => array('required', 'max:255'),
+			'precio' => array('required', 'numeric')
+		);
 
-	if ($validator -> fails()) {
-		$respuesta['mensaje'] = $validator;
-		$respuesta['error'] = true;
-	} else {
-		$producto = static::create($input);
+		$validator = Validator::make($input, $reglas);
 
-		$respuesta['mensaje'] = 'Producto creado :D';
-		$respuesta['error'] = false;
-		$respuesta['data'] = $producto;
+		if ($validator -> fails()) {
+			$respuesta['mensaje'] = $validator;
+			$respuesta['error'] = true;
+		} else {
+			$producto = static::create($input);
+
+			$respuesta['mensaje'] = 'Producto creado!';
+			$respuesta['error'] = false;
+			$respuesta['data'] = $producto;
+		}
+
+		return $respuesta;
 	}
-
-	return $respuesta;
 }
 ?>
